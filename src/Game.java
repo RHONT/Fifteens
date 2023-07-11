@@ -1,8 +1,6 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 
 public class Game extends JFrame { // класс Main в данной работе называют прямым наследником класса JFrame
 
@@ -11,15 +9,12 @@ public class Game extends JFrame { // класс Main в данной работ
     Класс GridLayout позволяет размещать компоненты в контейнере в виде таблицы. В каждой ячейке таблицы может быть размещен только один компонент.
     Количество строк и столбцов таблицы определяется или в конструкторе, или вызовом методов setColumns и setRows.*/
 
-    private JPanel panel = new JPanel(new GridLayout(4, 4, 2, 2));
+    private JPanel panel = new JPanel(new GridLayout(4, 4));
 
     /*Главное меню JMenuBar - компонент графического интерфейса Java Swing*/
 
     private JMenuBar menu = null;
-    //private JMenuBar help = null;
-    private final String fileMessage[] = new String[]{"Новая", "Выход"};
-    private final String helpMessage = "Об Авторе";
-    private static Random generator = new Random(); // генератор случайных чисел
+//    private static Random generator = new Random(); // генератор случайных чисел
     private int[][] numbers = new int[4][4];
 
     /* -=== Опредиление клиентской ширины экрана ===- */
@@ -31,7 +26,7 @@ public class Game extends JFrame { // класс Main в данной работ
         setSize(300, 300); // Задаем размеры окна приложения
         setLocationRelativeTo(null); // Окно приложения центрируется относительно экрана
 
-        setResizable(true); // задаем возможность растягивать окно
+        setResizable(false); // запрещаем возможность растягивать окно
         createMenu(); //инициализируем меню
 
         setJMenuBar(menu); // добавляем панель меню к окну
@@ -46,34 +41,34 @@ public class Game extends JFrame { // класс Main в данной работ
         Container container = getContentPane();
         init();
         panel.setDoubleBuffered(true);
-        panel.setBackground(Color.red); // устанавливаем цвет фона
+        panel.setBackground(Color.lightGray); // устанавливаем цвет фона
         container.add(panel); // добавление компонентов в контейнер
         repaintField();
-        JLabel();
+//        JLabel();
 
     }
 
     public void init() { // описание метода init
-        int[] invariants = Tests.getShuffleArray();
+        int[] randomArray = Tests.getShuffleArray();
         int idx = 0;
 
         for (int i = 0; i < numbers.length; i++) {
             for (int j = 0; j < numbers[i].length; j++) {
-                numbers[i][j] = invariants[idx];
+                numbers[i][j] = randomArray[idx];
                 idx++;
             }
         }
     }
 
-    public void JLabel() {
-        Border solidBorder = BorderFactory.createLineBorder(Color.BLACK, 1); // создаем границу черного цвета
-        Font font = new Font("Verdana", Font.PLAIN, 12); // задаем тип шрифта, и его размер
-        JLabel topLabel = new JLabel(); // создаем обьект topLabel типа JLabel
-        topLabel.setBorder(solidBorder); // устанавливаем границу
-        topLabel.setFont(font); // устанавливаем тип текста
-        topLabel.setForeground(Color.RED); // Устанавливаем цвет текста
-        menu.add(topLabel); // добавляем JLabel на пенель menu
-    }
+//    public void JLabel() {
+//        Border solidBorder = BorderFactory.createLineBorder(Color.BLACK, 1); // создаем границу черного цвета
+//        Font font = new Font("Verdana", Font.PLAIN, 12); // задаем тип шрифта, и его размер
+//        JLabel topLabel = new JLabel(); // создаем обьект topLabel типа JLabel
+//        topLabel.setBorder(solidBorder); // устанавливаем границу
+//        topLabel.setFont(font); // устанавливаем тип текста
+//        topLabel.setForeground(Color.WHITE); // Устанавливаем цвет текста
+//        menu.add(topLabel); // добавляем JLabel на пенель menu
+//    }
 
 
     public void repaintField() {  //метод расстановки кнопок со значениями на сетке
@@ -81,8 +76,12 @@ public class Game extends JFrame { // класс Main в данной работ
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
+
                 JButton button = new JButton(Integer.toString(numbers[i][j]));
+                button.setMargin(new Insets(0, 0, 0, 0));  // увеличивает доступное место для текста
+                button.setFont(new Font("Trebuchet MS",Font.PLAIN,50));
                 button.setFocusable(false);
+
                 panel.add(button);
                 button.setBackground(Color.getHSBColor(0.1059322f, 0.5221239f, 0.8862745f)); // устанавливаем цвет кнопок
                 if (numbers[i][j] == 0) {
@@ -116,12 +115,15 @@ public class Game extends JFrame { // класс Main в данной работ
         NewMenuListener listener = new NewMenuListener();
 
         JMenu fileMenu = new JMenu("File");
-        JMenuItem item_1 = new JMenuItem("New");
+        fileMenu.setMnemonic(KeyEvent.VK_F);
+        JMenuItem item_1 = new JMenuItem("New",KeyEvent.VK_N);
+        item_1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
         item_1.setActionCommand("new");
         item_1.addActionListener(listener);
 
 
-        JMenuItem item_2 = new JMenuItem("Exit");
+        JMenuItem item_2 = new JMenuItem("Exit",KeyEvent.VK_W);
+        item_2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_DOWN_MASK));
         item_2.addActionListener(listener);
         item_2.setActionCommand("exit");
         item_2.addActionListener(listener);
@@ -133,9 +135,12 @@ public class Game extends JFrame { // класс Main в данной работ
         menu.add(fileMenu);
 
         JMenu helpMenu = new JMenu("Help");
-        JMenuItem item_3 = new JMenuItem("About author");
+        helpMenu.setMnemonic(KeyEvent.VK_H);
+        JMenuItem item_3 = new JMenuItem("About author",KeyEvent.VK_A);
+        item_3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
         item_3.setActionCommand("about");
         item_3.addActionListener(listener);
+
         helpMenu.add(item_3);
         menu.add(helpMenu);
     }
@@ -144,7 +149,7 @@ public class Game extends JFrame { // класс Main в данной работ
 //        Component[] components = panel.getComponents();
 
         @Override
-        public void keyReleased(KeyEvent e) {
+        public void keyPressed(KeyEvent e) {
 
             if (e.getKeyCode() == KeyEvent.VK_UP) {
                 doMovie(KeyEvent.VK_UP, panel.getComponents());
@@ -164,7 +169,7 @@ public class Game extends JFrame { // класс Main в данной работ
     }
 
     private void doMovie(int command, Component[] components) {
-        Integer findIdxPosition = findText(command);
+        Integer findIdxPosition = findPosForChange(command);
 
         if (findIdxPosition != null) {
             JButton b = (JButton) components[findIdxPosition];
@@ -173,7 +178,7 @@ public class Game extends JFrame { // класс Main в данной работ
     }
 
 
-    private Integer findText(int command) {
+    private Integer findPosForChange(int command) {
         int calcResult;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -226,13 +231,20 @@ public class Game extends JFrame { // класс Main в данной работ
                 System.exit(0);
             }
             if ("about".equals(command)) {
-                JOptionPane.showMessageDialog(null, "Белова Анастасия\nГруппа 111\n2023 год");
+//                JOptionPane.showMessageDialog(null, "Белова Анастасия\nГруппа 111\n2023 год");
+
+                dialogInit();
             }
             if ("new".equals(command)) {
                 init();
                 repaintField();
             }//
         }
+    }
+
+    private void dialogInit() {
+        MyDialog myDialog=new MyDialog(this);
+        myDialog.setVisible(true);
     }
 
     private class ClickListener implements ActionListener {
@@ -286,7 +298,7 @@ public class Game extends JFrame { // класс Main в данной работ
         }
         repaintField();
         if (checkWin()) {
-            JOptionPane.showMessageDialog(null, "ВЫ ВЫИГРАЛИ!", "Поздравляем", 1);
+            JOptionPane.showMessageDialog(null, "ПОБЕДА!", "Примите поздравления", 1);
             init();
             repaintField();
             setVisible(false);
@@ -294,8 +306,33 @@ public class Game extends JFrame { // класс Main в данной работ
         }
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        Thread.sleep(1000);
+
+    private class MyDialog extends JDialog{
+        public MyDialog(JFrame jFrame) {
+            super(jFrame,"Info about author",true);
+            String text="Белова Анастасия <br> Группа 1111 <br> 2023 год";
+            JButton button=new JButton("Вернуться");
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    setVisible(false);
+                }
+            });
+
+            JLabel jLabel = new JLabel("<html><div style='text-align: center;'>" + text + "</div></html>");
+            jLabel.setHorizontalAlignment(SwingConstants.CENTER);
+//            add(new JLabel("Текст пробный \n Инородный"),BorderLayout.NORTH);
+            add(jLabel);
+            add(button, BorderLayout.SOUTH);
+            setBounds(new Rectangle(300,150));
+            setLocationRelativeTo(null); // Окно приложения центрируется относительно экрана
+            setResizable(false); // запрещаем возможность растягивать окно
+
+
+        }
+    }
+
+    public static void main(String[] args)  {
         JFrame app = new Game();
         app.setVisible(true);
     }
