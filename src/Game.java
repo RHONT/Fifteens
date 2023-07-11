@@ -14,8 +14,8 @@ public class Game extends JFrame { // класс Main в данной работ
     /*Главное меню JMenuBar - компонент графического интерфейса Java Swing*/
 
     private JMenuBar menu = null;
-//    private static Random generator = new Random(); // генератор случайных чисел
-    private int[][] numbers = new int[4][4];
+    //    private static Random generator = new Random(); // генератор случайных чисел
+    private final int[][] numbers = new int[4][4];
 
     /* -=== Опредиление клиентской ширины экрана ===- */
 
@@ -44,7 +44,6 @@ public class Game extends JFrame { // класс Main в данной работ
         panel.setBackground(Color.lightGray); // устанавливаем цвет фона
         container.add(panel); // добавление компонентов в контейнер
         repaintField();
-//        JLabel();
 
     }
 
@@ -60,16 +59,6 @@ public class Game extends JFrame { // класс Main в данной работ
         }
     }
 
-//    public void JLabel() {
-//        Border solidBorder = BorderFactory.createLineBorder(Color.BLACK, 1); // создаем границу черного цвета
-//        Font font = new Font("Verdana", Font.PLAIN, 12); // задаем тип шрифта, и его размер
-//        JLabel topLabel = new JLabel(); // создаем обьект topLabel типа JLabel
-//        topLabel.setBorder(solidBorder); // устанавливаем границу
-//        topLabel.setFont(font); // устанавливаем тип текста
-//        topLabel.setForeground(Color.WHITE); // Устанавливаем цвет текста
-//        menu.add(topLabel); // добавляем JLabel на пенель menu
-//    }
-
 
     public void repaintField() {  //метод расстановки кнопок со значениями на сетке
         panel.removeAll();
@@ -79,7 +68,7 @@ public class Game extends JFrame { // класс Main в данной работ
 
                 JButton button = new JButton(Integer.toString(numbers[i][j]));
                 button.setMargin(new Insets(0, 0, 0, 0));  // увеличивает доступное место для текста
-                button.setFont(new Font("Trebuchet MS",Font.PLAIN,50));
+                button.setFont(new Font("Trebuchet MS", Font.PLAIN, 50));
                 button.setFocusable(false);
 
                 panel.add(button);
@@ -116,13 +105,13 @@ public class Game extends JFrame { // класс Main в данной работ
 
         JMenu fileMenu = new JMenu("File");
         fileMenu.setMnemonic(KeyEvent.VK_F);
-        JMenuItem item_1 = new JMenuItem("New",KeyEvent.VK_N);
+        JMenuItem item_1 = new JMenuItem("New", KeyEvent.VK_N);
         item_1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
         item_1.setActionCommand("new");
         item_1.addActionListener(listener);
 
 
-        JMenuItem item_2 = new JMenuItem("Exit",KeyEvent.VK_W);
+        JMenuItem item_2 = new JMenuItem("Exit", KeyEvent.VK_W);
         item_2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_DOWN_MASK));
         item_2.addActionListener(listener);
         item_2.setActionCommand("exit");
@@ -136,7 +125,7 @@ public class Game extends JFrame { // класс Main в данной работ
 
         JMenu helpMenu = new JMenu("Help");
         helpMenu.setMnemonic(KeyEvent.VK_H);
-        JMenuItem item_3 = new JMenuItem("About author",KeyEvent.VK_A);
+        JMenuItem item_3 = new JMenuItem("About author", KeyEvent.VK_A);
         item_3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
         item_3.setActionCommand("about");
         item_3.addActionListener(listener);
@@ -146,7 +135,6 @@ public class Game extends JFrame { // класс Main в данной работ
     }
 
     private class NewKeyListener extends KeyAdapter {
-//        Component[] components = panel.getComponents();
 
         @Override
         public void keyPressed(KeyEvent e) {
@@ -243,7 +231,7 @@ public class Game extends JFrame { // класс Main в данной работ
     }
 
     private void dialogInit() {
-        MyDialog myDialog=new MyDialog(this);
+        MyDialog myDialog = new MyDialog(this);
         myDialog.setVisible(true);
     }
 
@@ -307,11 +295,11 @@ public class Game extends JFrame { // класс Main в данной работ
     }
 
 
-    private class MyDialog extends JDialog{
+    private static class MyDialog extends JDialog {
         public MyDialog(JFrame jFrame) {
-            super(jFrame,"Info about author",true);
-            String text="Белова Анастасия <br> Группа 1111 <br> 2023 год";
-            JButton button=new JButton("Вернуться");
+            super(jFrame, "Info about author", true);
+            String text = "Белова Анастасия <br> Группа 1111 <br> 2023 год";
+            JButton button = new JButton("Вернуться");
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -324,7 +312,7 @@ public class Game extends JFrame { // класс Main в данной работ
 //            add(new JLabel("Текст пробный \n Инородный"),BorderLayout.NORTH);
             add(jLabel);
             add(button, BorderLayout.SOUTH);
-            setBounds(new Rectangle(300,150));
+            setBounds(new Rectangle(300, 150));
             setLocationRelativeTo(null); // Окно приложения центрируется относительно экрана
             setResizable(false); // запрещаем возможность растягивать окно
 
@@ -332,7 +320,7 @@ public class Game extends JFrame { // класс Main в данной работ
         }
     }
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
         JFrame app = new Game();
         app.setVisible(true);
     }
