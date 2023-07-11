@@ -17,7 +17,7 @@ public class Game extends JFrame { // класс Main в данной работ
 
     private JMenuBar menu = null;
     //private JMenuBar help = null;
-    private final String fileMessage[] = new String [] {"Новая", "Выход"};
+    private final String fileMessage[] = new String[]{"Новая", "Выход"};
     private final String helpMessage = "Об Авторе";
     private static Random generator = new Random(); // генератор случайных чисел
     private int[][] numbers = new int[4][4];
@@ -25,11 +25,10 @@ public class Game extends JFrame { // класс Main в данной работ
     /* -=== Опредиление клиентской ширины экрана ===- */
 
 
-
     public Game() {
         setTitle("Пятнашки"); //Заголовок окна
 
-        setSize (300, 300); // Задаем размеры окна приложения
+        setSize(300, 300); // Задаем размеры окна приложения
         setLocationRelativeTo(null); // Окно приложения центрируется относительно экрана
 
         setResizable(true); // задаем возможность растягивать окно
@@ -42,6 +41,7 @@ public class Game extends JFrame { // класс Main в данной работ
         //Каждый компонент перед выводом на экран помещается в контейнер (container). Контейнер "знает", как разместить компоненты на экране.
         /*Создав компонент — объект класса Component или его расширения, следует добавить его к предварительно созданному объекту класса container
         или его расширения одним из методов add (). */
+        this.addKeyListener(new NewKeyListener());
 
         Container container = getContentPane();
         init();
@@ -55,11 +55,11 @@ public class Game extends JFrame { // класс Main в данной работ
 
     public void init() { // описание метода init
         int[] invariants = Tests.getShuffleArray();
-        int idx=0;
+        int idx = 0;
 
         for (int i = 0; i < numbers.length; i++) {
             for (int j = 0; j < numbers[i].length; j++) {
-                numbers[i][j]=invariants[idx];
+                numbers[i][j] = invariants[idx];
                 idx++;
             }
         }
@@ -76,7 +76,6 @@ public class Game extends JFrame { // класс Main в данной работ
     }
 
 
-
     public void repaintField() {  //метод расстановки кнопок со значениями на сетке
         panel.removeAll();
 
@@ -88,10 +87,12 @@ public class Game extends JFrame { // класс Main в данной работ
                 button.setBackground(Color.getHSBColor(0.1059322f, 0.5221239f, 0.8862745f)); // устанавливаем цвет кнопок
                 if (numbers[i][j] == 0) {
                     button.setVisible(false); // сокрытие нулевого элемента массива
+
                 } else
                     button.addActionListener(new ClickListener());
             }
         }
+
 
         panel.validate();
     }
@@ -112,7 +113,7 @@ public class Game extends JFrame { // класс Main в данной работ
 
     private void createMenu() {
         menu = new JMenuBar();
-        NewMenuListener listener=new NewMenuListener();
+        NewMenuListener listener = new NewMenuListener();
 
         JMenu fileMenu = new JMenu("File");
         JMenuItem item_1 = new JMenuItem("New");
@@ -138,6 +139,85 @@ public class Game extends JFrame { // класс Main в данной работ
         helpMenu.add(item_3);
         menu.add(helpMenu);
     }
+
+    private class NewKeyListener extends KeyAdapter {
+//        Component[] components = panel.getComponents();
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+
+            if (e.getKeyCode() == KeyEvent.VK_UP) {
+                doMovie(KeyEvent.VK_UP, panel.getComponents());
+            }
+            if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                doMovie(KeyEvent.VK_DOWN, panel.getComponents());
+
+            }
+            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                doMovie(KeyEvent.VK_LEFT, panel.getComponents());
+            }
+            if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                doMovie(KeyEvent.VK_RIGHT, panel.getComponents());
+            }
+
+        }
+    }
+
+    private void doMovie(int command, Component[] components) {
+        Integer findIdxPosition = findText(command);
+
+        if (findIdxPosition != null) {
+            JButton b = (JButton) components[findIdxPosition];
+            b.doClick();
+        }
+    }
+
+
+    private Integer findText(int command) {
+        int calcResult;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (numbers[i][j] == 0) {
+
+                    if (command == KeyEvent.VK_UP) {
+                        calcResult = i * numbers.length + j + numbers.length;
+                        if (calcResult > 15) {
+                            return null;
+                        } else return calcResult;
+                    }
+
+                    if (command == KeyEvent.VK_DOWN) {
+                        calcResult = i * numbers.length + j - numbers.length;
+                        if (calcResult < 0) {
+                            return null;
+                        } else return calcResult;
+                    }
+
+                    if (command == KeyEvent.VK_LEFT) {
+
+                        if (j + 1 < 4) {
+                            calcResult = i * numbers.length + j + 1;
+                            return calcResult;
+
+                        } else return null;
+                    }
+
+                    if (command == KeyEvent.VK_RIGHT) {
+                        if (j - 1 >= 0) {
+                            calcResult = i * numbers.length + j - 1;
+                            return calcResult;
+
+                        } else return null;
+                    }
+                }
+
+            }
+
+        }
+
+        return null;
+    }
+
 
     private class NewMenuListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
