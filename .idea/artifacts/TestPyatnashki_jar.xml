@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="TestPyatnashki:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/TestPyatnashki_jar</output-path>
+    <root id="archive" name="TestPyatnashki.jar">
+      <element id="module-output" name="Pyatnashki_Game" />
+    </root>
+  </artifact>
+</component>

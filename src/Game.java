@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Random;
 
 public class Game extends JFrame { // класс Main в данной работе называют прямым наследником класса JFrame
 
@@ -48,7 +49,7 @@ public class Game extends JFrame { // класс Main в данной работ
     }
 
     public void init() { // описание метода init
-        int[] randomArray = Tests.getShuffleArray();
+        int[] randomArray = RandomGeneratorMatrix.getShuffleArray();
         int idx = 0;
 
         for (int i = 0; i < numbers.length; i++) {
@@ -315,10 +316,43 @@ public class Game extends JFrame { // класс Main в данной работ
             setBounds(new Rectangle(300, 150));
             setLocationRelativeTo(null); // Окно приложения центрируется относительно экрана
             setResizable(false); // запрещаем возможность растягивать окно
-
-
         }
     }
+
+    private static class RandomGeneratorMatrix {
+
+        public static int[] getShuffleArray() {
+            int[] arr = rowArray();
+            shuffle(arr);
+            return arr;
+        }
+
+        private static int[] rowArray() {
+            int[] arr = new int[16];
+            for (int i = 0; i < 15; i++) {
+                arr[i] = i + 1;
+            }
+
+            return arr;
+        }
+
+        private static void shuffle(int[] inputArr) {
+            int temp;
+            int buffer;
+            int randomIdx;
+            Random random = new Random();
+            for (int i = 0; i < inputArr.length - 1; i++) {
+                randomIdx = random.nextInt(15);
+
+                temp = inputArr[randomIdx];
+                buffer = inputArr[i];
+
+                inputArr[i] = temp;
+                inputArr[randomIdx] = buffer;
+            }
+        }
+    }
+
 
     public static void main(String[] args) {
         JFrame app = new Game();
