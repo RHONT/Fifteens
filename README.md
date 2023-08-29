@@ -27,6 +27,7 @@ https://github.com/dir512/Pyatnashki
 - скачать пакет RunGame
 - запустить Run_Game.bat
 
+![image](https://github.com/RHONT/Fifteens/assets/96048104/fa3893c4-cff8-4fbf-ab23-34a4526be2b3)
 
 
 
